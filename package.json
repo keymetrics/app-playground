@@ -10,6 +10,9 @@
     "type": "git",
     "url": "https://github.com/keymetrics/app-playground.git"
   },
+  "dependencies" : {
+    "express" : "3.0"
+  },
   "author": "",
   "license": "ISC",
   "bugs": {
