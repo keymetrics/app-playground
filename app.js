@@ -28,7 +28,7 @@ app.configure('development', function(){
 });
 
 app.get('/', function(req, res) {
-  res.send('v1');
+  res.send('v2');
 });
 
 // app.get('/', routes.index);
