@@ -1,0 +1,19 @@
+{
+  "name": "app-playground",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/keymetrics/app-playground.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keymetrics/app-playground/issues"
+  },
+  "homepage": "https://github.com/keymetrics/app-playground"
+}
