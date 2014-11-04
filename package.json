@@ -1,22 +1,12 @@
 {
-  "name": "app-playground",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "application-name",
+  "version": "0.0.1",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app"
   },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/keymetrics/app-playground.git"
-  },
-  "dependencies" : {
-    "express" : "3.0"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/keymetrics/app-playground/issues"
-  },
-  "homepage": "https://github.com/keymetrics/app-playground"
+  "dependencies": {
+    "express": "3.0.6",
+    "jade": "*"
+  }
 }
