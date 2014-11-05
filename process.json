@@ -11,7 +11,7 @@
     "cwd"                : ".",
     "node_args"          : "",
     "ignoreWatch"        : ["[\\/\\\\]\\./", "log"],
-    "watch"              : false,
-    "post_update"        : "npm i; echo TRACE>TRACE"
+    "watch"              : true,
+    "post_update"        : "npm i > npm_logs; echo TRACE>TRACE"
   }]
 }
