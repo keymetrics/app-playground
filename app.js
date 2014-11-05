@@ -8,7 +8,6 @@ var axm = require('axm');
  */
 axm.http();
 
-
 /**
  * Module dependencies.
  */
@@ -16,11 +15,12 @@ axm.http();
 var express = require('express');
 var http = require('http');
 
-
 /**
  * Catch all uncaught exceptions
  */
 axm.catchAll();
+
+
 
 var app = express();
 
@@ -34,6 +34,9 @@ app.configure(function(){
 app.get('/', function(req, res) {
   res.send('v2');
 });
+
+
+
 
 var probes = axm.enableProbe();
 

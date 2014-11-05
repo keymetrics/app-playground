@@ -2,18 +2,22 @@
 var axm = require('axm');
 var fs  = require('fs');
 
+
 fs.readFile('/var/run/rethinkdb/default/pid_file', function(err, data) {
+
   var pid = data.toString();
 
   axm.configureModule({
-    name : 'RethinkDB',
-    version : '1.0',
-    pid : 4611,
-    errors : false,
-    latency : false,
-    versioning : false,
+    name             : 'RethinkDB',
+    version          : '1.0',
+    pid              : pid,
+    errors           : false,
+    latency          : false,
+    versioning       : false,
     show_module_meta : true,
-    author : 'Alexandre Strzelewicz'
+    author           : 'Alexandre Strzelewicz',
+    comment          : 'This module monitor critical metrics of RethinkDB database',
+    icon             : 'database'
   });
 
 });
@@ -28,3 +32,10 @@ rdb.connect({
   // Do query to create probes [...]
   // Todo
 });
+
+axm.action('restart', function(reply) {
+  // action
+  reply({success:true});
+});
+
+// -> Action backup
