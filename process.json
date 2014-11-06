@@ -12,6 +12,6 @@
     "node_args"          : "",
     "ignoreWatch"        : ["[\\/\\\\]\\./", "log"],
     "watch"              : false,
-    "post_update"        : "npm i; echo TRACE>TRACE"
+    "post_update"        : ["npm i", "echo TRACE>TRACE"]
   }]
 }
