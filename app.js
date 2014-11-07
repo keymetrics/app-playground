@@ -35,6 +35,12 @@ app.get('/', function(req, res) {
   res.send('v2');
 });
 
+app.get('/slow', function(req, res) {
+  setTimeout(function() {
+    res.send('v2');
+  }, 500);
+});
+
 
 
 
@@ -52,7 +58,7 @@ setInterval(function() {
 /**
  * Function probing
  */
-probes["fn probe"] = function() {
+probes["User connected"] = function() {
   return Math.floor(Math.random() * 100);
 };
 
@@ -66,7 +72,7 @@ probes["key map"] = Object.keys({'sock1':null, 'sock2':null }).length;
  */
 app.use(axm.expressErrorHandler());
 
-var counter1min;
+var counter1min = 23;
 
 setInterval(function () {
   counter1min = 0;
@@ -77,9 +83,29 @@ app.use('*', function(next) {
   next();
 });
 
+probes["Min http rate"] = counter1min + 'req/min';
+
 var server = http.createServer(app).listen(app.get('port'), function(){
-  probes['listening'] = true;
+  probes['http listening'] = true;
   console.log("Express server listening on port " + app.get('port'));
+});
+
+axm.action('flush connection', function() {
+});
+
+axm.action('debug mode', function() {
+});
+
+axm.action('minify', function() {
+});
+
+axm.action('minify', function() {
+});
+
+axm.action('clear queue', function() {
+});
+
+axm.action('flush sessions', function() {
 });
 
 
