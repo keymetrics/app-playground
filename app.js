@@ -111,3 +111,18 @@ axm.action('do:http:query', function(reply) {
 
   reply({success : true});
 });
+
+/**
+ * Probe system #4 - Histograms
+ */
+var histogram = probe.histogram({
+  name        : 'Randomness',
+  measurement : 'mean'
+});
+
+var latency = 0;
+
+setInterval(function() {
+  latency = Math.round(Math.random() * 100);
+  histogram.update(latency);
+}, 100);
