@@ -1,8 +1,8 @@
+# Getting started with Keymetrics
 
+![https://keymetrics.io/assets/images/application-demo.png?v=7e433fae15](https://keymetrics.io/assets/images/application-demo.png?v=7e433fae15)
 
-# Getting started with Keymetrics I/O
-
-This example will show you how to deeply monitor your Node.js application.
+This example will show you how to monitor your NodeJS application at the code level.
 The app.js file contain all the Keymetrics features you can use.
 
 ## Run it yourself
@@ -14,6 +14,6 @@ $ cd app-playground
 $ pm2 start app.js
 ```
 
-Create a new Bucket on Keymetrics : [https://app.keymetrics.io/#/bucket/new](https://app.keymetrics.io/#/bucket/new)
+## Link PM2 with Keymetrics
 
-And follow the steps indicated on Keymetrics
+Create a new Bucket on Keymetrics : [https://app.keymetrics.io/#/bucket/new](https://app.keymetrics.io/#/bucket/new)

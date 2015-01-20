@@ -4,19 +4,11 @@ var axm = require('../..');
 
 axm.http();
 
-var redis = require('redis'),
-    client = redis.createClient();
-
 var express = require('express');
 var app = express();
 
-
 app.get('/', function(req, res) {
-  client.set("stringokey", 'yaya');
-
-  client.get("stringokey", function(err, rep) {
-    res.send(202, rep);
-  });
+  res.send(202, {success:true});
 });
 
 app.get('/nothing', function(req, res) {

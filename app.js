@@ -1,114 +1,113 @@
 
 var axm = require('axm');
 
-
-
 /**
- * Inject this first before requiring http
- *
- * Enable http latency monitoring
+ * Report any uncaught errors
+ */
+axm.catchAll();
+/**
+ * Enable HTTP latency monitoring
  */
 axm.http();
 
-/**
- * Module dependencies.
- */
-
-var express = require('express');
-var http = require('http');
-
-/**
- * Catch all uncaught exceptions
- */
-axm.catchAll();
-
-
-
-var app = express();
-
-app.configure(function(){
-  app.set('port', process.env.PORT || 3900);
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(express.errorHandler());
-});
-
-app.get('/', function(req, res) {
-  res.send('v2');
-});
-
-app.get('/slow', function(req, res) {
-  setTimeout(function() {
-    res.send('v2');
-  }, 500);
-});
-
-
-
-
-var probes = axm.enableProbe();
-
-/**
- * Simple counter probing
- */
-probes.counter = 0;
-
-setInterval(function() {
-  probes.counter++;
-}, 1000);
-
-/**
- * Function probing
- */
-probes["User connected"] = function() {
-  return Math.floor(Math.random() * 100);
+var users_db = {
+  'alex'  : 'str',
+  'jeni'  : 'oiu'
 };
 
-/**
- * Function probing #2
- */
-probes["key map"] = Object.keys({'sock1':null, 'sock2':null }).length;
+
+var probe = axm.probe();
 
 /**
- * Record Express HTTP errors
+ * Probe system #1 - Metrics
+ *
+ * Probe values that can be read instantly.
  */
-app.use(axm.expressErrorHandler());
-
-var counter1min = 23;
-
-setInterval(function () {
-  counter1min = 0;
-}, 60 * 1000);
-
-app.use('*', function(next) {
-  counter1min++;
-  next();
+var rt_users = probe.metric({
+  name : 'User count',
+  value : function() {
+    return Object.keys(users_db).length;
+  }
 });
 
-probes["Min http rate"] = counter1min + 'req/min';
-
-var server = http.createServer(app).listen(app.get('port'), function(){
-  probes['http listening'] = true;
-  console.log("Express server listening on port " + app.get('port'));
+/**
+ * Probe system #2 - Meter
+ *
+ * Probe things that are measured as events / interval.
+ */
+var meter = probe.meter({
+  name    : 'req/min',
+  seconds : 60
 });
 
-axm.action('flush connection', function() {
+/**
+ * Use case for Meter Probe
+ *
+ * Create a mock http server
+ */
+var http  = require('http');
+
+http.createServer(function(req, res) {
+  // Then mark it at every connections
+  meter.mark();
+  res.end('Thanks');
+}).listen(5005);
+
+
+/**
+ * Probe system #3 - Counter
+ *
+ * Measure things that increment or decrement
+ */
+var counter = probe.counter({
+  name : 'Downloads'
 });
 
-axm.action('debug mode', function() {
+
+/**
+ * Now let's create some remote action
+ * And act on the Counter probe we just created
+ */
+axm.action('decrement', {comment : 'Increment downloads'}, function(reply) {
+  // Decrement the previous counter
+  counter.dec();
+  reply({success : true});
 });
 
-axm.action('minify', function() {
+axm.action('increment', {comment : 'Decrement downloads'}, function(reply) {
+  // Increment the previous counter
+  counter.inc();
+  reply({success : true});
 });
 
-axm.action('minify', function() {
+axm.action('throw error', {comment : 'Throw a random error'}, function(reply) {
+  // Increment the previous counter
+  throw new Error('This error will be caught!');
 });
 
-axm.action('clear queue', function() {
+/**
+ * Create an action that hit the HTTP server we just created
+ * So we can see how the meter probe behaves
+ */
+axm.action('do:http:query', function(reply) {
+  var options = {
+    hostname : '127.0.0.1',
+    port     : 5005,
+    path     : '/users',
+    method   : 'GET',
+    headers  : { 'Content-Type': 'application/json' }
+  };
+
+  var req = http.request(options, function(res) {
+    res.setEncoding('utf8');
+    res.on('data', function (data) {
+      console.log(data);
+    });
+  });
+  req.on('error', function(e) {
+    console.log('problem with request: ' + e.message);
+  });
+  req.end();
+
+  reply({success : true});
 });
-
-axm.action('flush sessions', function() {
-});
-
-
-probes['http connections'] = server._connections;

@@ -1,6 +1,7 @@
 
 var axm = require('..');
 var request = require('request');
+var should = require('should');
 
 function fork() {
   return require('child_process').fork(__dirname + '/transaction/app.mock.js', []);
@@ -32,8 +33,9 @@ describe('AXM transaction', function() {
         return false;
 
       data.type.should.eql('http:transaction');
+      data.data.should.have.properties('ip', 'time', 'url', 'method');
       process.kill(app.pid);
-      done();
+      return done();
     });
 
 

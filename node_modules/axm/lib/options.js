@@ -20,6 +20,10 @@ Options.configureModule = function(opts) {
   }, false);
 };
 
+Options.keepAlive = function() {
+  setInterval(function() {}, 100000);
+};
+
 Options.setPID = Options.monitorPID;
 
 module.exports = Options;

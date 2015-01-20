@@ -16,6 +16,8 @@ describe('Event', function() {
 
     app.once('message', function(data) {
       data.type.should.eql('human:event');
+      console.log(app.pid);
+      console.log('killing process');
       process.kill(app.pid);
       done();
     });

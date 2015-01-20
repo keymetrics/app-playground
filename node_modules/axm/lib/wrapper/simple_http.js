@@ -16,7 +16,11 @@ var HttpWrap = module.exports = function(http) {
         var http_start = {
           url    : request.url,
           method : request.method,
-          start  : Date.now()
+          start  : Date.now(),
+          ip     : request.headers['x-forwarded-for'] ||
+            request.connection.remoteAddress ||
+            request.socket.remoteAddress ||
+            request.connection.socket.remoteAddress
         };
 
         response.once('finish', function() {
@@ -28,9 +32,12 @@ var HttpWrap = module.exports = function(http) {
               method     : http_start.method,
               time       : Date.now() - http_start.start,
               code       : response.statusCode,
+              ip         : http_start.ip,
               size       : response.getHeader('Content-Length') || null
             }
           });
+
+          http_start = null;
         });
 
         return listener.apply(self, args);

@@ -1,4 +1,3 @@
-
 var debug = require('debug')('axm:events');
 var Common    = require('./common.js');
 

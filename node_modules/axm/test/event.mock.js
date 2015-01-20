@@ -1,5 +1,4 @@
 
-
 var axm = require('..');
 
 setInterval(function() {
