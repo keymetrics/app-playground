@@ -107,6 +107,16 @@ axm.action('throw error', {comment : 'Throw a random error'}, function(reply) {
   throw new Error('This error will be caught!');
 });
 
+axm.action('get env', function(reply) {
+  // Increment the previous counter
+  reply(process.env);
+});
+
+axm.action('modules version', {comment : 'Throw a random error'}, function(reply) {
+  // Increment the previous counter
+  reply(process.versions);
+});
+
 /**
  * Create an action that hit the HTTP server we just created
  * So we can see how the meter probe behaves
