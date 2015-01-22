@@ -55,14 +55,36 @@ http.createServer(function(req, res) {
 
 
 /**
- * Probe system #3 - Counter
+ * Probe system #3 - Histograms
+ *
+ * Measuring the event loop delay
+ */
+
+var TIME_INTERVAL = 1000;
+
+var oldTime = process.hrtime();
+
+var histogram = probe.histogram({
+  name        : 'Loop delay',
+  measurement : 'mean',
+  unit        : 'ms'
+});
+
+setInterval(function() {
+  var newTime = process.hrtime();
+  var delay = (newTime[0] - oldTime[0]) * 1e3 + (newTime[1] - oldTime[1]) / 1e6 - TIME_INTERVAL;
+  oldTime = newTime;
+  histogram.update(delay);
+}, TIME_INTERVAL);
+
+/**
+ * Probe system #4 - Counter
  *
  * Measure things that increment or decrement
  */
 var counter = probe.counter({
   name : 'Downloads'
 });
-
 
 /**
  * Now let's create some remote action
@@ -111,18 +133,3 @@ axm.action('do:http:query', function(reply) {
 
   reply({success : true});
 });
-
-/**
- * Probe system #4 - Histograms
- */
-var histogram = probe.histogram({
-  name        : 'Randomness',
-  measurement : 'mean'
-});
-
-var latency = 0;
-
-setInterval(function() {
-  latency = Math.round(Math.random() * 100);
-  histogram.update(latency);
-}, 100);
