@@ -14,6 +14,8 @@ $ cd app-playground
 $ pm2 start app.js
 ```
 
+Comment the return in app.js to discover the other features of Keymetrics.
+
 ## Link PM2 with Keymetrics
 
 Create a new Bucket on Keymetrics : [https://app.keymetrics.io/#/bucket/new](https://app.keymetrics.io/#/bucket/new)

@@ -15,11 +15,44 @@ var users_db = {
   'jeni'  : 'oiu'
 };
 
-
 var probe = axm.probe();
 
 /**
- * Probe system #1 - Metrics
+ * Probe system #1 - Histograms
+ *
+ * Measuring the event loop delay
+ */
+
+var TIME_INTERVAL = 1000;
+
+var oldTime = process.hrtime();
+
+var histogram = probe.histogram({
+  name        : 'Loop delay',
+  measurement : 'mean',
+  unit        : 'ms'
+});
+
+setInterval(function() {
+  var newTime = process.hrtime();
+  var delay = (newTime[0] - oldTime[0]) * 1e3 + (newTime[1] - oldTime[1]) / 1e6 - TIME_INTERVAL;
+  oldTime = newTime;
+  histogram.update(delay);
+}, TIME_INTERVAL);
+
+
+/**
+ * !!!!!!!!!!!!!!!!!!!!!!!!!
+ *
+ * Uncomment this return to discover the other features of Keymetrics
+ *
+ * !!!!!!!!!!!!!!!!!!!!!!!!!
+ */
+return ;
+
+
+/**
+ * Probe system #2 - Metrics
  *
  * Probe values that can be read instantly.
  */
@@ -31,7 +64,7 @@ var rt_users = probe.metric({
 });
 
 /**
- * Probe system #2 - Meter
+ * Probe system #3 - Meter
  *
  * Probe things that are measured as events / interval.
  */
@@ -53,29 +86,6 @@ http.createServer(function(req, res) {
   res.end('Thanks');
 }).listen(5005);
 
-
-/**
- * Probe system #3 - Histograms
- *
- * Measuring the event loop delay
- */
-
-var TIME_INTERVAL = 1000;
-
-var oldTime = process.hrtime();
-
-var histogram = probe.histogram({
-  name        : 'Loop delay',
-  measurement : 'mean',
-  unit        : 'ms'
-});
-
-setInterval(function() {
-  var newTime = process.hrtime();
-  var delay = (newTime[0] - oldTime[0]) * 1e3 + (newTime[1] - oldTime[1]) / 1e6 - TIME_INTERVAL;
-  oldTime = newTime;
-  histogram.update(delay);
-}, TIME_INTERVAL);
 
 /**
  * Probe system #4 - Counter
