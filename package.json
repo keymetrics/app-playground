@@ -6,6 +6,6 @@
     "start": "node app"
   },
   "dependencies": {
-    "axm" : "latest"
+    "pmx" : "latest"
   }
 }

@@ -1,21 +1,12 @@
 
-var axm = require('axm');
-
-/**
- * Report any uncaught errors
- */
-axm.catchAll();
-/**
- * Enable HTTP latency monitoring
- */
-axm.http();
+var pmx = require('pmx').init();
 
 var users_db = {
   'alex'  : 'str',
   'jeni'  : 'oiu'
 };
 
-var probe = axm.probe();
+var probe = pmx.probe();
 
 /**
  * Probe system #1 - Histograms
@@ -39,16 +30,6 @@ setInterval(function() {
   oldTime = newTime;
   histogram.update(delay);
 }, TIME_INTERVAL);
-
-
-/**
- * !!!!!!!!!!!!!!!!!!!!!!!!!
- *
- * Uncomment this return to discover the other features of Keymetrics
- *
- * !!!!!!!!!!!!!!!!!!!!!!!!!
- */
-return ;
 
 
 /**
@@ -100,29 +81,29 @@ var counter = probe.counter({
  * Now let's create some remote action
  * And act on the Counter probe we just created
  */
-axm.action('decrement', {comment : 'Increment downloads'}, function(reply) {
+pmx.action('decrement', {comment : 'Increment downloads'}, function(reply) {
   // Decrement the previous counter
   counter.dec();
   reply({success : true});
 });
 
-axm.action('increment', {comment : 'Decrement downloads'}, function(reply) {
+pmx.action('increment', {comment : 'Decrement downloads'}, function(reply) {
   // Increment the previous counter
   counter.inc();
   reply({success : true});
 });
 
-axm.action('throw error', {comment : 'Throw a random error'}, function(reply) {
+pmx.action('throw error', {comment : 'Throw a random error'}, function(reply) {
   // Increment the previous counter
   throw new Error('This error will be caught!');
 });
 
-axm.action('get env', function(reply) {
+pmx.action('get env', function(reply) {
   // Increment the previous counter
   reply(process.env);
 });
 
-axm.action('modules version', {comment : 'Throw a random error'}, function(reply) {
+pmx.action('modules version', {comment : 'Throw a random error'}, function(reply) {
   // Increment the previous counter
   reply(process.versions);
 });
@@ -131,7 +112,7 @@ axm.action('modules version', {comment : 'Throw a random error'}, function(reply
  * Create an action that hit the HTTP server we just created
  * So we can see how the meter probe behaves
  */
-axm.action('do:http:query', function(reply) {
+pmx.action('do:http:query', function(reply) {
   var options = {
     hostname : '127.0.0.1',
     port     : 5005,
