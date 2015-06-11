@@ -103,9 +103,14 @@ pmx.action('get env', function(reply) {
   reply(process.env);
 });
 
-pmx.action('modules version', {comment : 'Throw a random error'}, function(reply) {
+pmx.action('modules version', {comment : 'Get modules version'}, function(reply) {
   // Increment the previous counter
   reply(process.versions);
+});
+
+pmx.action('Action with params', {comment: 'Returns sent params'}, function(data, reply) {
+  // Replies the received data
+  reply("Data received: " + JSON.stringify(data));
 });
 
 /**
