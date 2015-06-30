@@ -6,6 +6,7 @@
     "start": "node app"
   },
   "dependencies": {
-    "pmx" : "latest"
+    "pmx" : "latest",
+    "v8-profiler" : "*"
   }
 }
