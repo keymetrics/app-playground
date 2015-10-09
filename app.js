@@ -1,5 +1,5 @@
 
-var pmx = require('pmx').init();
+var pmx = require('pmx').init({ http : true });
 
 var users_db = {
   'alex'  : 'str',
