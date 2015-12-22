@@ -7,5 +7,10 @@
   },
   "dependencies": {
     "pmx" : "latest"
-  }
+  },
+  "apps" : [{
+    "script" : "app.js",
+    "name" : "keymetrics tuto",
+    "post_update" : ["npm install"]
+  }]
 }
