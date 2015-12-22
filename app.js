@@ -1,10 +1,7 @@
 
-var pmx = require('pmx').init({ http : true });
-
-var users_db = {
-  'alex'  : 'str',
-  'jeni'  : 'oiu'
-};
+var pmx = require('pmx').init({
+  http : true
+});
 
 var probe = pmx.probe();
 
@@ -38,10 +35,20 @@ setInterval(function() {
  *
  * Probe values that can be read instantly.
  */
+var random_variable = 0;
+
+setInterval(function() {
+  random_variable++;
+}, 400);
+
 var rt_users = probe.metric({
-  name : 'User count',
+  name : 'Var count',
   value : function() {
-    return Object.keys(users_db).length;
+    return random_variable;
+  },
+  alert : {
+    mode  : 'threshold',
+    value : 20
   }
 });
 
