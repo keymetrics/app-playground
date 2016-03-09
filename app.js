@@ -45,15 +45,8 @@ var rt_users = probe.metric({
   name : 'Var count',
   value : function() {
     return random_variable;
-  },
-  alert : {
-    mode  : 'threshold',
-    value : 20
   }
 });
-
-
-
 
 /**
  * Probe system #3 - Meter
