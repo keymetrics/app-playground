@@ -1,10 +1,10 @@
 {
-	"apps" : [
+  "apps" : [
     {
       "name"      : "webserver",
       "script"    : "app.js",
       "exec_mode" : "cluster",
-      "instances" : 5,
+      "instances" : 3,
       "watching"  : false,
       "env": {
         "PORT": "3000"
@@ -13,33 +13,34 @@
         "NODE_ENV": "production",
         "PORT": "2000"
       }
-	  },
+    },
     {
-	  	"name"      : "worker",
-	  	"script"    : "worker/index.js",
+      "name"      : "worker",
+      "script"    : "worker/index.js",
+      "exec_interpreter" : "chakranode",
       "exec_mode" : "fork",
       "watching"  : false,
       "env": {
-	  		"TARGET": "http://localhost:3000"
-  		},
-	  	"env_production" : {
-	  		"NODE_ENV": "production",
-	  		"TARGET": "http://localhost:2000"
-		  }
-	  }
+        "TARGET": "http://localhost:3000"
+      },
+      "env_production" : {
+        "NODE_ENV": "production",
+        "TARGET": "http://localhost:2000"
+      }
+    }
   ],
-		"deploy" : {
-			"production" : {
-				"user" : "vmarchaud",
-				"host" : ["pm2testswag2746.cloudapp.net"],
-				"ref"  : "origin/windows",
-				"repo" : "https://github.com/keymetrics/app-playground",
-				"path" : "/home/vmarchaud/app",
-				"pre-deploy-local" : "echo 'This is a local executed command'",
-				"post-deploy" : "export PATH=$PATH:/home/vmarchaud/.nvm/versions/node/v6.4.0/bin ; npm install ; npm install worker/ ; pm2 delete all ; pm2 startOrRestart ecosystem.json --env production",
-				"env"  : {
-					"NODE_ENV": "production"
-				}
-			}
-		}
+    "deploy" : {
+      "production" : {
+        "user" : "vmarchaud",
+        "host" : ["pm2testswag2746.cloudapp.net"],
+        "ref"  : "origin/windows",
+        "repo" : "https://github.com/keymetrics/app-playground",
+        "path" : "/home/vmarchaud/app",
+        "pre-deploy-local" : "echo 'This is a local executed command'",
+        "post-deploy" : "export PATH=$PATH:/home/vmarchaud/.nvm/versions/node/v6.4.0/bin ; npm install ; npm install worker/ ; pm2 delete all ; pm2 startOrRestart ecosystem.json --env production",
+        "env"  : {
+          "NODE_ENV": "production"
+        }
+      }
+    }
 }
