@@ -1,0 +1,45 @@
+{
+	"apps" : [
+    {
+      "name"      : "webserver",
+      "script"    : "app.js",
+      "exec_mode" : "cluster",
+      "instances" : -1,
+      "watching"  : false,
+      "env": {
+        "PORT": "3000"
+      },
+      "env_production" : {
+        "NODE_ENV": "production",
+        "PORT": "80"
+      }
+	  },
+    {
+	  	"name"      : "worker",
+	  	"script"    : "worker/index.js",
+      "exec_mode" : "fork",
+      "watching"  : false,
+      "env": {
+	  		"TARGET": "http://localhost:3000"
+  		},
+	  	"env_production" : {
+	  		"NODE_ENV": "production",
+	  		"TARGET": "http://localhost:80"
+		  }
+	  }
+  ],
+		"deploy" : {
+			"production" : {
+				"user" : "vmarchaud",
+				"host" : ["pm2testswag2746.cloudapp.net"],
+				"ref"  : "origin/windows",
+				"repo" : "git@github.com:keymetrics/app-playground.git",
+				"path" : "/home/app/",
+				"pre-deploy-local" : "echo 'This is a local executed command'",
+				"post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production",
+				"env"  : {
+					"NODE_ENV": "production"
+				}
+			}
+		}
+}
