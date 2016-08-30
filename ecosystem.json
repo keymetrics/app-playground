@@ -34,7 +34,7 @@
 				"host" : ["pm2testswag2746.cloudapp.net"],
 				"ref"  : "origin/windows",
 				"repo" : "git@github.com:keymetrics/app-playground.git",
-				"path" : "/home/app/",
+				"path" : "/home/vmarchaud/app",
 				"pre-deploy-local" : "echo 'This is a local executed command'",
 				"post-deploy" : "npm install && pm2 startOrRestart ecosystem.json --env production",
 				"env"  : {
