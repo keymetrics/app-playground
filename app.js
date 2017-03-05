@@ -102,6 +102,13 @@ pmx.action('throw error', {comment : 'Throw a random error'}, function(reply) {
   throw new Error('This error will be caught!');
 });
 
+pmx.action('send event', {comment: 'Sends an event'}, function(reply) {
+  pmx.emit('event:sent', {
+    msg : 'You sent a custom event!'
+  });
+  reply("Sent event!");
+});
+
 pmx.action('get env', function(reply) {
   // Increment the previous counter
   reply(process.env);
