@@ -3,6 +3,8 @@ var pmx = require('pmx').init({
   http : true
 });
 
+console.log('Hello');
+
 var probe = pmx.probe();
 
 /**
