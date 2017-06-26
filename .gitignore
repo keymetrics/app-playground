@@ -1,0 +1,14 @@
+/node_modules
+*.log
+*.log
+*.pid
+test/child
+*.iml
+.idea/**
+*.heapsnapshot
+*.cpuprofile
+.cache-require-paths.json
+dist/
+*.deb
+*.rpm
+package-lock.json
