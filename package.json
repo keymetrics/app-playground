@@ -6,11 +6,13 @@
     "start": "node app"
   },
   "dependencies": {
-    "pmx" : "latest"
+    "@pm2/io": "^2.1.3"
   },
-  "apps" : [{
-    "script" : "app.js",
-    "watch" : "true",
-    "name" : "keymetrics tuto"
-  }]
+  "apps": [
+    {
+      "script": "app.js",
+      "watch": "true",
+      "name": "PM2 Plus tuto"
+    }
+  ]
 }

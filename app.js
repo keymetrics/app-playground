@@ -1,9 +1,12 @@
+const io = require('@pm2/io')
+const http = require('http')
 
-var pmx = require('pmx').init({
-  http : true
-});
+io.init({
+  network: {
+    traffic: true
+  }
+})
 
-var probe = pmx.probe();
 
 /**
  * Probe system #1 - Histograms
@@ -11,23 +14,23 @@ var probe = pmx.probe();
  * Measuring the event loop delay
  */
 
-var TIME_INTERVAL = 1000;
+const TIME_INTERVAL = 1000
 
-var oldTime = process.hrtime();
+let oldTime = process.hrtime()
 
-var histogram = probe.histogram({
-  name        : 'Loop delay',
-  measurement : 'mean',
-  unit        : 'ms'
-});
+const histogram = io.histogram({
+  name: 'Loop delay',
+  measurement: 'mean',
+  unit: 'ms'
+})
 
-setInterval(function() {
-  var newTime = process.hrtime();
-  var delay = (newTime[0] - oldTime[0]) * 1e3 + (newTime[1] - oldTime[1]) / 1e6 - TIME_INTERVAL;
-  oldTime = newTime;
+setInterval(() => {
+  const newTime = process.hrtime()
+  const delay = (newTime[0] - oldTime[0]) * 1e3 + (newTime[1] - oldTime[1]) / 1e6 - TIME_INTERVAL
+  oldTime = newTime
   // Now we update the metric
-  histogram.update(delay);
-}, TIME_INTERVAL);
+  histogram.update(delay)
+}, TIME_INTERVAL)
 
 
 /**
@@ -35,41 +38,40 @@ setInterval(function() {
  *
  * Probe values that can be read instantly.
  */
-var random_variable = 0;
+let randomVariable = 0
 
-setInterval(function() {
-  random_variable++;
-}, 400);
+setInterval(() => {
+  randomVariable++
+}, 400)
 
-var rt_users = probe.metric({
-  name : 'Var count',
-  value : function() {
-    return random_variable;
+io.metric({
+  name: 'Var count',
+  value: () => {
+    return randomVariable
   }
-});
+})
 
 /**
  * Probe system #3 - Meter
  *
  * Probe things that are measured as events / interval.
  */
-var meter = probe.meter({
-  name    : 'req/min',
-  seconds : 60
-});
+const meter = io.meter({
+  name: 'req/min',
+  timeframe: 60
+})
 
 /**
  * Use case for Meter Probe
  *
  * Create a mock http server
  */
-var http  = require('http');
 
-http.createServer(function(req, res) {
+http.createServer((req, res) => {
   // Then mark it at every connections
-  meter.mark();
-  res.end('Thanks');
-}).listen(5005);
+  meter.mark()
+  res.end('Thanks')
+}).listen(5005)
 
 
 /**
@@ -77,76 +79,75 @@ http.createServer(function(req, res) {
  *
  * Measure things that increment or decrement
  */
-var counter = probe.counter({
-  name : 'Downloads'
-});
+const counter = io.counter({
+  name: 'Downloads'
+})
 
 /**
  * Now let's create some remote action
  * And act on the Counter probe we just created
  */
-pmx.action('decrement', {comment : 'Increment downloads'}, function(reply) {
-  // Decrement the previous counter
-  counter.dec();
-  reply({success : true});
-});
+io.action('decrement', { comment: 'Increment downloads' }, (cb) => {
+  counter.dec()
+  cb({ success: true })
+})
 
-pmx.action('increment', {comment : 'Decrement downloads'}, function(reply) {
+io.action('increment', { comment : 'Decrement downloads' }, (cb) => {
   // Increment the previous counter
-  counter.inc();
-  reply({success : true});
-});
+  counter.inc()
+  cb({ success: true })
+})
 
-pmx.action('throw error', {comment : 'Throw a random error'}, function(reply) {
+io.action('throw error', { comment: 'Throw a random error ' }, (cb) => {
   // Increment the previous counter
-  throw new Error('This error will be caught!');
-});
+  throw new Error('This error will be caught!')
+})
 
-pmx.action('send event', {comment: 'Sends an event'}, function(reply) {
-  pmx.emit('event:sent', {
-    msg : 'You sent a custom event!'
-  });
-  reply("Sent event!");
-});
+io.action('send event', { comment: 'Sends an event' }, (cb) => {
+  io.emit('event:sent', {
+    msg: 'You sent a custom event!'
+  })
+  cb('Sent event!')
+})
 
-pmx.action('get env', function(reply) {
-  // Increment the previous counter
-  reply(process.env);
-});
+io.action('get env', (cb) => {
+  cb(process.env)
+})
 
-pmx.action('modules version', {comment : 'Get modules version'}, function(reply) {
-  // Increment the previous counter
-  reply(process.versions);
-});
+io.action('modules version', { comment: 'Get modules version' }, (cb) => {
+  cb(process.versions)
+})
 
-pmx.action('Action with params', {comment: 'Returns sent params'}, function(data, reply) {
+io.action('Action with params', { comment: 'Returns sent params' }, (data, cb) => {
   // Replies the received data
-  reply("Data received: " + JSON.stringify(data));
-});
+  cb(`Data received: ${JSON.stringify(data)}`)
+})
 
 /**
  * Create an action that hit the HTTP server we just created
  * So we can see how the meter probe behaves
  */
-pmx.action('do:http:query', function(reply) {
-  var options = {
-    hostname : '127.0.0.1',
-    port     : 5005,
-    path     : '/users',
-    method   : 'GET',
-    headers  : { 'Content-Type': 'application/json' }
-  };
+io.action('do:http:query', (cb) => {
+  const options = {
+    hostname: '127.0.0.1',
+    port: 5005,
+    path: '/users',
+    method: 'GET',
+    headers: { 'Content-Type': 'application/json' }
+  }
 
-  var req = http.request(options, function(res) {
-    res.setEncoding('utf8');
-    res.on('data', function (data) {
-      console.log(data);
-    });
-  });
-  req.on('error', function(e) {
-    console.log('problem with request: ' + e.message);
-  });
-  req.end();
+  const req = http.request(options, (res) => {
+    res.setEncoding('utf8')
+    res.on('data', (data) => {
+      console.log(data)
+    })
+  })
 
-  reply({success : true});
-});
+  req.on('error', (e) => {
+    console.log(`problem with request: ${e.message}`)
+  })
+
+  req.end()
+
+  cb({ success: true })
+})
