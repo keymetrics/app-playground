@@ -1,9 +1,9 @@
-# Getting started with Keymetrics
+# Getting started with PM2 Plus
 
 This example will show you how to monitor your NodeJS application at the code level.
-The app.js file contain all the Keymetrics features you can use.
+The app.js file contain all the PM2 Plus features you can use.
 
-![https://keymetrics.io/assets/images/application-demo.png?v=7e433fae15](https://keymetrics.io/assets/images/application-demo.png?v=7e433fae15)
+![https://pm2.io/_nuxt/img/Unified_overview.925badd.png](https://pm2.io/_nuxt/img/Unified_overview.925badd.png)
 
 ## Run it yourself
 
@@ -14,8 +14,8 @@ $ cd app-playground
 $ pm2 start app.js
 ```
 
-Comment the return in app.js to discover the other features of Keymetrics.
+Comment the return in app.js to discover the other features of PM2 Plus.
 
-## Link PM2 with Keymetrics
+## Link PM2 with PM2 Plus
 
-Create a new Bucket on Keymetrics : [https://app.keymetrics.io/#/bucket/new](https://app.keymetrics.io/#/bucket/new)
+Create a new Bucket on PM2 Plus : [https://app.pm2.io/](https://app.pm2.io/)
