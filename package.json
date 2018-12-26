@@ -6,7 +6,7 @@
     "start": "node app"
   },
   "dependencies": {
-    "@pm2/io": "^2.1.3"
+    "@pm2/io": "^2.4.7"
   },
   "apps": [
     {
